@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piano/piano.dart';
 import 'package:flutter_midi/flutter_midi.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,6 +31,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Piano"),
@@ -51,6 +56,7 @@ class _HomeState extends State<Home> {
                 setState(() {
                   this.value = value.toString();
                   fileName = "${value.toString()}.sf2";
+                  load('assets/$fileName');
                 });
               })
         ],
@@ -60,13 +66,13 @@ class _HomeState extends State<Home> {
           noteRange: NoteRange.forClefs([
             Clef.Treble,
           ]),
-          highlightedNotes: [NotePosition(note: Note.C, octave: 3)],
+          highlightedNotes: [NotePosition(note: Note.A, octave: 3)],
           naturalColor: Colors.white,
           accidentalColor: Colors.black,
-          keyWidth: 60,
+          keyWidth: 50,
           onNotePositionTapped: (position) {
             setState(() {
-              _flutterMidi.playMidiNote(midi: position.note.index);
+              _flutterMidi.playMidiNote(midi: position.pitch);
             });
           },
         ),
